@@ -25,28 +25,46 @@
     //EndPoint: GET, retorna todos os dados de clientes
     $app->get('/clientes', function($request, $response, $args){
 
-        //Chama a função (na pasta controles) que vai requisitar os dados no Banco de Dados 
-    if  ( $listDados = exibirClientes())
+     
+
+        //Valida a existencia da chegada de dados como parametros 
+        //Parametro para filtra pelo nome 
+        if (isset( $request -> getQueryParams()['nome']))
+        {
+        /* Recebendo dados pela queryString */
+           $nome = (string) null;
+           $nome = $request -> getQueryParams()['nome']; 
+
+           if($listDados = buscarNomeClientes($nome))
             if($listDadosArray = criarArray($listDados))
                 $listDadosJSON = criarJSON($listDadosArray);
-                
+    }else
+    {    
+       /****************************************************************/ 
 
-        
-                //Validação para tratar Banco de Dados sem conteúdo
-        if($listDadosArray)       
-        {
-            
-        return $response  ->withStatus(200)
-                          ->withHeader('Content-Type', 'application/json') 
-                          ->write($listDadosJSON);
+        //Chama a função (na pasta controles) que vai requisitar os dados no Banco de Dados 
+  //  Chama a função na pasta Controles que vai requisitar os dados no BD
 
-        }else
-        {
-            return $response    ->withStatus(204);
-                                                      
+  if($listDados=exibirClientes()) {
+
+    if($listDadosArray=criarArray($listDados)) {
+
+        $listDadosJSON=criarJson($listDadosArray);
+
+             }
 
         }
-    });
+
+    }
+    if($listDadosArray) {
+    return $response ->withStatus(200)
+                     ->withHeader('Content-Type', 'application/json/xml')
+                     ->write($listDadosJSON);
+}
+else {
+    return $response ->withStatus(204);
+    }
+});
 
      //EndPoint: GET, retorna um cliente pelo ID
      $app->get('/clientes/{id}', function($request, $response, $args){

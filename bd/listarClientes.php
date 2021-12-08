@@ -42,4 +42,23 @@ function buscar ($idCliente)
     return $select;
 }
 
+//Retorna a lista de registros com filtro pelo nome do cliente
+function buscarNome ($nome)
+{
+    $sql = "select tblcliente.*, tblEstado.sigla 
+                from tblcliente
+	            inner join tblEstado 
+		        on tblEstado.idEstado = tblCliente.idEstado
+     where tblcliente.nome like '%".$nome."%'";
+    
+    //Abre a conexão com o BD
+    $conexao = conexaoMysql();
+    
+    //Solicita aoBD a execução do script SQL
+    $select = mysqli_query($conexao, $sql);
+    
+    return $select;
+
+}
+
 ?>

@@ -25,6 +25,13 @@ function buscarClientes ($id)
     return $dados;
 }
 
+//Função para buscar dados do BD com filtro pelo nome 
+function buscarNomeClientes($nome)
+{
+    $dados = buscarNome($nome);
+    return $dados;
+}
+
 // Função para criar um array de dados com base no retorno do Banco de Dados 
 function criarArray($objeto)
 {
